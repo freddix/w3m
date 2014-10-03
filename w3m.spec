@@ -1,7 +1,8 @@
+# based on PLD Linux spec git://git.pld-linux.org/packages/w3m.git
 Summary:	Text based browser for the world wide web
 Name:		w3m
 Version:	0.5.3
-Release:	4
+Release:	5
 Epoch:		1
 License:	MIT-like
 Group:		Applications/Networking
@@ -22,7 +23,6 @@ BuildRequires:	imlib2-devel
 BuildRequires:	ncurses-devel
 BuildRequires:	openssl-devel
 BuildRequires:	pkg-config
-Provides:	webclient
 BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
 
 %description
@@ -54,13 +54,9 @@ cp -f /usr/share/automake/config.sub .
 %{__aclocal}
 %{__autoconf}
 %configure \
-	--enable-gopher				\
-	--enable-image="x11,fb,fb+s"		\
-	--enable-keymap=lynx			\
-	--with-browser=%{_bindir}/firefurz	\
-	--with-editor=/bin/vi			\
-	--with-imagelib="gdk-pixbuf"		\
-	--with-mailer=/bin/mail			\
+	--disable-w3mmailer	\
+	--enable-image=x11,fb	\
+	--with-imagelib=gdk-pixbuf	\
 	--with-termlib=ncurses
 %{__make}
 
@@ -74,12 +70,13 @@ install -d $RPM_BUILD_ROOT%{_mandir}/man1
 # symlink instead of duplicated file
 ln -sf w3mhelp-lynx_en.html $RPM_BUILD_ROOT%{_datadir}/w3m/w3mhelp.html
 
-%find_lang %{name}
+#%find_lang %{name}
 
 %clean
 rm -rf $RPM_BUILD_ROOT
 
-%files -f %{name}.lang
+%files
+# -f %{name}.lang
 %defattr(644,root,root,755)
 %doc doc/*.html doc/{README,keymap,menu}.* NEWS
 %attr(755,root,root) %{_bindir}/*
